@@ -148,6 +148,7 @@ class NeuralNetwork(object):
                 self._activations[i] = activations.softmax(self._zs[i])
             else:
                 self._activations[i] = self.activation_fn(self._zs[i])
+        print(self._activations)
 
     def _back_prop(self, x, y):
         nabla_b = [np.zeros(bias.shape) for bias in self.biases]

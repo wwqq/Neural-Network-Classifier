@@ -1,2 +1,3 @@
-wget==3.2
-numpy==1.16.5
+wget
+numpy
+idx2numpy
