@@ -1,3 +1,7 @@
-wget
+pandas
 numpy
+matplotlib
+gzip
+hashlib
 idx2numpy
+requests
