@@ -7,6 +7,7 @@ pip install -r requirements.txt
 
 ## Results and models
 test set acc:
+download the weights pretrained at [here](https://drive.google.com/drive/folders/1hCaKNrlMF6ut0b36SedPRNC_434R8VVa?usp=sharing)
 
 ## Test
 To test model on test set:
