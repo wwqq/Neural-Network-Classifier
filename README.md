@@ -6,9 +6,10 @@ pip install -r requirements.txt
 ```
 
 ## Results and models
-test set acc: 98%.
+Test set acc: 98%.
 
-download the weights pretrained at [here](https://drive.google.com/drive/folders/1hCaKNrlMF6ut0b36SedPRNC_434R8VVa?usp=sharing)
+Download the weights pretrained at [here](https://pan.baidu.com/s/1x7iWHLC_kEz-0ZqLOV9T-w)
+Extraction code：e2yb
 
 ## Test
 To test model on test set:
