@@ -216,12 +216,12 @@ def main():
         plt.plot(x_plot, loss_val_list, label='val_loss')
         plt.legend()
         plt.title('loss')
-        plt.savefig('loss')
+        plt.savefig('figure/loss')
         plt.clf()
         plt.plot(x_plot, acc_val_list, label='val_acc')
         plt.legend()
         plt.title('val acc')
-        plt.savefig('val_acc')
+        plt.savefig('figure/val_acc')
         # vis weights
         w = np.matmul(W[0], W[1]).transpose(1, 0)
         for j in range(w.shape[0]):
@@ -230,7 +230,7 @@ def main():
             fig = plt.figure()
             ax1 = fig.add_subplot()
             ax1.imshow(m, cmap=plt.cm.gray)
-            plt.savefig('{}.jpg'.format(j))
+            plt.savefig('figure/{}.jpg'.format(j))
 
         y_pred_final = FCnet(X_test, W, b)
         print("Final test loss is {:.8}".format(loss(y_pred_final, Y_test)))
