@@ -5,3 +5,4 @@ gzip
 hashlib
 idx2numpy
 requests
+opencv-python

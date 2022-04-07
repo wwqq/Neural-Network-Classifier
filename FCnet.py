@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import os
 import readdata
 import argparse
+import cv2
 
 
 def parse_args():
@@ -11,10 +12,10 @@ def parse_args():
     parser.add_argument('--work-dir', default='best_model.npz', help='the dir to save logs and models')
     parser.add_argument('--resume-from', default='best_model.npz', help='the checkpoint file to resume from')
     parser.add_argument('--seed', type=int, default=42, help='random seed')
-    parser.add_argument('--lr', default=1, help='learning rate')
-    parser.add_argument('--alpha', default=1e-6, help='regularization')
+    parser.add_argument('--lr', default=13, help='learning rate')
+    parser.add_argument('--alpha', default=1e-5, help='regularization')
     parser.add_argument('--num_iter', default=2000, help='number of iterations of gradient descent')
-    parser.add_argument('--n_H', default=256, help='number of neurons in the hidden layer')
+    parser.add_argument('--n_H', default=512, help='number of neurons in the hidden layer')
     parser.add_argument('--n', default=784, help='number of pixels in an image')
     parser.add_argument('--K', default=10, help='number of class')
     parser.add_argument('--eval', action='store_true', help='whether to evaluate the checkpoint')
@@ -135,10 +136,10 @@ def load(filename='bestmodel.npz'):
         Name of the ``.npz`` compressed binary in models directory.
 
     """
-    npz_members = np.load(os.path.join(os.curdir, filename))
+    npz_members = np.load(os.path.join(os.curdir, filename), allow_pickle=True)
 
-    w = list(npz_members['weights'])
-    b = list(npz_members['biases'])
+    w = npz_members['weights']
+    b = npz_members['biases']
     return w, b
 
 
@@ -177,6 +178,8 @@ def main():
         acc_val_list = []
         best_acc = 0
         for i in range(args.num_iter):
+            if i % (args.num_iter * 4 // 5) == 0:
+                args.lr = args.lr * 0.1
             dW, db = backprop(W, b, X_train, Y_train, args.alpha)
             W[0] -= args.lr * dW[0]
             W[1] -= args.lr * dW[1]
@@ -205,6 +208,8 @@ def main():
                 print("Val accuracy after", i + 1, "iterations is {:.4%}".format(
                     acc_val))
                 print("Best val accuracy is {:.4%}".format(best_acc))
+
+        # plot loss acc
         x_plot = range(len(loss_train_list))
         plt.plot(x_plot, loss_train_list, label='train_loss')
         plt.plot(x_plot, loss_val_list, label='val_loss')
@@ -216,6 +221,16 @@ def main():
         plt.legend()
         plt.title('val acc')
         plt.savefig('val_acc')
+        # vis weights
+        w = np.matmul(W[0], W[1]).transpose(1, 0)
+        for j in range(w.shape[0]):
+            m = cv2.normalize(w[j].reshape(28, 28), None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX,
+                              dtype=cv2.CV_8U)
+            fig = plt.figure()
+            ax1 = fig.add_subplot()
+            ax1.imshow(m, cmap=plt.cm.gray)
+            plt.savefig('{}.jpg'.format(j))
+
         y_pred_final = FCnet(X_test, W, b)
         print("Final test loss is {:.8}".format(loss(y_pred_final, Y_test)))
         print("Final test accuracy is {:.4%}".format(np.mean(np.argmax(y_pred_final, axis=1) == Y_test)))
