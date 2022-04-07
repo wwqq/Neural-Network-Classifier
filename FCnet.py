@@ -178,6 +178,7 @@ def main():
         acc_val_list = []
         best_acc = 0
         for i in range(args.num_iter):
+            # lr scheduler
             if i % (args.num_iter * 4 // 5) == 0:
                 args.lr = args.lr * 0.1
             dW, db = backprop(W, b, X_train, Y_train, args.alpha)
